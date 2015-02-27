@@ -67,19 +67,39 @@ AUTHENTICATION_BACKENDS = (
   'lazysignup.backends.LazySignupBackend',
 )
 
+# Database
+# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
-# Internationalization
-# https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
-USE_I18N = True
-
+TIME_ZONE = 'Europe/Dublin'
+LANGUAGE_CODE = 'en-gb'
 USE_L10N = True
-
+SITE_ID = 1
+USE_I18N = True
 USE_TZ = True
+
+MEDIA_ROOT = ''
+MEDIA_URL = ''
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'shared_static')
+STATIC_URL = '/shared_static/'
+
+
+# Additional locations of static files
+STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
+
+# List of finder classes that know how to find static files in
+# various locations.
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+)
+
 
 AUTH_USER_MODEL = 'web.MyUser'
 LAZYSIGNUP_USER_MODEL = AUTH_USER_MODEL

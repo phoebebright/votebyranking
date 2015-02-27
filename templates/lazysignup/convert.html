@@ -4,6 +4,7 @@
 
 {% block main %}
     <h3>Please enter your email and a password to save your votes</h3>
+    <p>This email is not displayed anywhere and will not be used in any way without your permission</p>
     <form method="post" action="{% url 'lazysignup_convert' %}">
         {% csrf_token %}
         {{ form.as_p }}

@@ -5,10 +5,14 @@
 {% block main %}
     <h3>{{ question.label }}</h3>
     <p>{{ question.help_text }}</p>
+    
+    {% if user.is_authenticated %}
     <p>Answering as: {{ user.email }} &nbsp;<a href="/logout" class="btn btn-warning ">Logout</a></p>
+    {%endif %}
+    
     <a href="{% url "save-answers" question.id %}" class="btn btn-success btn-lg">Save my Answers</a>
 
-
+    <p>Drag the items up and down until they are in the a good order, with important ones at the top and less important lower down.  Then click Save My Answers to move on.</p>
 
 
     <!-- List with handle -->
