@@ -1,0 +1,32 @@
+{% extends 'bootstrap3/bootstrap3.html' %}
+
+{% load url from future %}
+{% load i18n lazysignup_tags %}
+{% load bootstrap3 %}
+
+{% block bootstrap3_extra_head %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/Sortable.min.js"></script>
+    <link href="{{ STATIC_URL }}css/styles.css" rel="stylesheet" type="text/css"/>
+{% endblock %}
+
+{% block bootstrap3_content %}
+    <div class="container">
+        <h1>{% block title %}Ask Question{% endblock %}</h1>
+
+
+        {#        <p>#}
+        {#            <a href="{% url 'home' %}">home</a>#}
+        {#            <a href="{% url 'formset_default' %}">formset</a>#}
+        {##}
+        {#        </p>#}
+
+        {% bootstrap_messages %}
+
+        {% block content %}
+            {%  block main %}
+
+                {% endblock main %}
+        {% endblock %}
+    </div>
+
+{% endblock %}
