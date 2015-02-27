@@ -50,6 +50,8 @@
 
 
     {% else %}
-        <a href="/ask/1/" class="btn btn-success btn-lg">Get Started...</a>
+        <p><a href="/ask/1/" class="btn btn-success btn-lg">Get Started...</a></p>
+        <p>OR,  <a href="{% url "login" %}" class="btn btn-success ">Login with your email address</a> to change your votes or see results</p>
+
     {% endif %}
 {% endblock %}

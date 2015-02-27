@@ -5,7 +5,9 @@
 {% block main %}
     <h3>{{ question.label }}</h3>
     <p>{{ question.help_text }}</p>
+    {% if user.is_authenticated %}
     <p>Answering as: {{ user.email }} &nbsp;<a href="/logout" class="btn btn-warning ">Logout</a></p>
+    {% endif %}
     <a href="{% url "save-answers" question.id %}" class="btn btn-success btn-lg">Save my Answers</a>
 
 
@@ -13,8 +15,6 @@
 
     <!-- List with handle -->
     <div id="answers" class="list-group well">
-
-
 
 
         {% for item in answers %}

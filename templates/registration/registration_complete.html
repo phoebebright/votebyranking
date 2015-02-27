@@ -1,0 +1,29 @@
+{% extends "base_simple.html" %}
+
+{% load i18n %}
+
+{% block title %}{% trans "Registration Complete" %}{% endblock %}
+
+{% block template %}login{% endblock %}
+
+{% block content %}
+
+       <div class="text-center">
+      <h1>{% trans "Green My Day Beta" %}</h1>
+
+
+      <p class="lead">{% blocktrans %}Thank you for registering with Green My Day beta.  What next?{% endblocktrans %}</p>
+        <br />
+      <p>{% blocktrans %}We have guessed your carbon footprint based on you living in{% endblocktrans %} {{ user.country }}.  {% blocktrans %}If this is not correct you can adjust your footprint.{% endblocktrans %}</p>
+        <br />
+           <a href="/footprint/" class="btn btn-large  do_next">{% trans "Check Footprint" %}</a>
+        <br />
+                   <br />
+      <p>{% blocktrans %}You should receive an email with a link to get 50kg of free carbon to get you started.{% endblocktrans %}</p>
+        <br />
+      <p>{% blocktrans %}Or just dive in...{% endblocktrans %}</p>
+      <a href="/" role="button" class="btn btn-large do-next text-center" >{% trans "Start Greening My Day" %}</a>
+
+    </div>
+
+{% endblock %}

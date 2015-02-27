@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Login" %}{% endblock title %}
+
+
+{% block main %}
+
+    <div class="row">
+        <div class="col-md-3 col-md-offset-3">
+            <h1 class="glyphicons lock">Sign In<i></i></h1>
+
+            <!-- Box -->
+            <div class="widget widget-heading-simple widget-body-gray">
+
+                <div class="widget-body">
+
+                    <!-- Form -->
+                    {% if form.errors %}
+                        <span class="text-error unstyled">{{ form.non_field_errors }}</span>
+                    {% endif %}
+
+                    <form action="{{ app_path }}" method="post" id="login-form" class="row">{% csrf_token %}
+                        <label>{% trans "Email" %}</label>
+                        {% if form.username.errors %}{{form.username.errors }}{% endif %}
+                        <input type="text" name="username" id="username" class="input-block-level form-control" placeholder="Your Username or Email address"/>
+
+                        <label >{% trans "Password" %}</label>
+                        {% if form.password.errors %}{{form.password.errors}}{% endif %}
+                        <input type="password" name="password" id="password" class="input-block-level form-control margin-none" placeholder="Your Password" />
+                        <a class="password" href="">{% trans "forgot it" %}?</a>
+                        <div class="separator bottom"></div>
+
+                        <div class="col-md-8 padding-none ">
+                            <div class="uniformjs innerL"><label class="checkbox"><input type="checkbox" value="remember-me" >{% trans "Remember me" %}</label></div>
+                        </div>
+                        <div class="col-md-4 pull-right padding-none">
+                            <button class="btn btn-block btn-inverse do_next" type="submit">&nbsp;{% trans "Sign in" %}&nbsp;</button>
+                        </div>
+
+                    </form>
+                    <!-- // Form END -->
+
+                </div>
+
+            </div>
+            <!-- // Box END -->
+
+
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+
+
