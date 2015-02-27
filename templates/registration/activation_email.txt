@@ -1,0 +1,11 @@
+
+{% trans "Thanks for registering on" %} {{ site }} !
+
+{% trans "You can activate simply by clicking the link below:
+
+You have" %} {{ expiration_days }} {% trans "days to activate your account.
+
+http" %}://{{ site }}/{% trans "accounts/activate" %}/{{ activation_key }}
+
+{% trans "Yours" %},
+{{ site }} {% trans "team" %}
