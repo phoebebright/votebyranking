@@ -67,17 +67,6 @@ AUTHENTICATION_BACKENDS = (
   'lazysignup.backends.LazySignupBackend',
 )
 
-# Database
-# https://docs.djangoproject.com/en/1.7/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'votebyranking',
-        'USER': '',
-        'PASSWORD': '',
-    }
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
