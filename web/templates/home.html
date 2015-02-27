@@ -20,6 +20,10 @@
                             <li>{{ item.answer__title }} <span class="label label-info label-as-badge pull-right">{{ item.percent|floatformat:"0" }}</span></li>
                         {% endfor %}
                     </ol>
+                    {% if not q2_answered %}
+
+                        <a href="/ask/2/" class="btn btn-success btn-lg">Now do the same for "What makes the perfect committee?"</a>
+                        {% endif %}
                 {%  else  %}
                     <a href="/ask/1/" class="btn btn-primary btn-lg">What makes the perfect committee member?</a>
                 {% endif %}
