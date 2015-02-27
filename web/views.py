@@ -1,3 +1,4 @@
+from __future__ import division
 from django.shortcuts import render
 from web.models import *
 # Create your views here.
@@ -22,7 +23,7 @@ from lazysignup.utils import is_lazy_user
 import json
 import csv
 from datetime import datetime,timedelta, date
-
+from operator import itemgetter
 
 class Home(TemplateView):
 
@@ -36,12 +37,29 @@ class Home(TemplateView):
 
         if me.is_authenticated():
             context['q1_answered'] = Submission.objects.filter(question__id=1, user=me).count() > 0
-            context['q1'] = Submission.objects.filter(question__id=1).values('answer__title').annotate(total=Sum('score'))
+            q1 = Submission.objects.filter(question__id=1).values('answer__title').annotate(total=Sum('score'),
+                                                                                            percent=Sum('score')).order_by('total')
             context['q1_count'] = Submission.objects.filter(question_id=1).values('user').annotate(Count('user', distinct=True)).count()
+            q1_total = Submission.objects.filter(question__id=1).values('question__id').annotate(total=Sum('score'))[0]
+            mult = float(context['q1_count']) * q1.count()
+            context['q1'] = []
+            for i in q1:
+                context['q1'].append({'total': i['total'],
+                                      'percent':  (1 - (i['total'] /  mult)) * 100,
+                                      'answer__title': i['answer__title']})
+
 
             context['q2_answered'] = Submission.objects.filter(question__id=2, user=me).count() > 0
-            context['q2'] = Submission.objects.filter(question__id=2).values('answer__title').annotate(total=Sum('score'))
+            q2 = Submission.objects.filter(question__id=2).values('answer__title').annotate(total=Sum('score'), percent=Sum('score')).order_by('total')
             context['q2_count'] = Submission.objects.filter(question_id=2).values('user').annotate(Count('user', distinct=True)).count()
+            q2_total = Submission.objects.filter(question__id=2).values('question__id').annotate(total=Sum('score'))[0]
+            mult = float(context['q1_count']) * q1.count()
+            context['q2'] = []
+            for i in q2:
+                context['q2'].append({'total': i['total'],
+                                      'percent':  (1 - (i['total'] /  mult)) * 100,
+                                      'answer__title': i['answer__title']})
+
 
         return context
 
