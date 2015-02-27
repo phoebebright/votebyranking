@@ -73,9 +73,9 @@ AUTHENTICATION_BACKENDS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'questionnaire',
-        'USER': 'root',
-        'PASSWORD': 'irnbru',
+        'NAME': 'votebyranking',
+        'USER': '',
+        'PASSWORD': '',
     }
 }
 
@@ -143,3 +143,10 @@ QUERY_INSPECT_HEADER_STATS = True
 QUERY_INSPECT_LOG_QUERIES = True
 # Whether to log queries that are above an absolute limit (default: None - disabled)
 QUERY_INSPECT_ABSOLUTE_LIMIT = 100 # in milliseconds
+
+
+try:
+    from config.settings_local import *
+except ImportError:
+    pass
+
