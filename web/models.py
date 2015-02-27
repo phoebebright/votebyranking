@@ -103,6 +103,7 @@ class Answer(models.Model):
     score = models.IntegerField(default=0)
     order = models.IntegerField(default=0)
     question = models.ForeignKey('Question', related_name="answers")
+    live = models.BooleanField(default=True)
 
     is_default = models.BooleanField(default=False)
 
