@@ -2,14 +2,31 @@
 
 
 
-        {% block main %}
-            <a href="{% url "save-answers" question.id %}" class="btn btn-default btn-lrg">Save my Answers</a>
-            <ul id="answers">
-                {% for item in answers %}
-                    <li id="answer_{{ item.id }}" data-id="{{ item.id }}" class="panel panel-default">{{ item.title }}</li>
-                {% endfor %}
-            </ul>
-        {% endblock %}
+{% block main %}
+    <h3>{{ question.label }}</h3>
+    <p>{{ question.help_text }}</p>
+    <p>Answering as: {{ user.email }} &nbsp;<a href="/logout" class="btn btn-warning ">Logout</a></p>
+    <a href="{% url "save-answers" question.id %}" class="btn btn-success btn-lg">Save my Answers</a>
+
+
+
+
+    <!-- List with handle -->
+    <div id="answers" class="list-group well">
+
+
+
+
+        {% for item in answers %}
+            <div class="list-group-item" id="answer_{{ item.id }}" data-id="{{ item.id }}">
+                <span class="glyphicon glyphicon-move" aria-hidden="true"></span>
+                {{ item.title}}
+            </div>
+
+
+        {% endfor %}
+    </div>
+{% endblock %}
 
 {% block bootstrap3_extra_script %}
     <script>

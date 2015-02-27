@@ -92,6 +92,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = 'web.MyUser'
+LAZYSIGNUP_USER_MODEL = AUTH_USER_MODEL
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/

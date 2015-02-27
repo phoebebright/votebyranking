@@ -13,6 +13,7 @@ from django.views.generic import TemplateView,ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.core.urlresolvers import reverse_lazy
 from django.core.urlresolvers import reverse
+from django.db.models import Count, Sum
 
 from lazysignup.decorators import allow_lazy_user
 from lazysignup.utils import is_lazy_user
@@ -23,6 +24,27 @@ import csv
 from datetime import datetime,timedelta, date
 
 
+class Home(TemplateView):
+
+
+    template_name = "home.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(Home, self).get_context_data(**kwargs)
+        me = self.request.user
+
+        if me.is_authenticated():
+            context['q1_answered'] = Submission.objects.filter(question__id=1, user=me).count() > 0
+            context['q1'] = Submission.objects.filter(question__id=1).values('answer__title').annotate(total=Sum('score'))
+            context['q1_count'] = Submission.objects.filter(question_id=1).values('user').annotate(Count('user', distinct=True)).count()
+
+            context['q2_answered'] = Submission.objects.filter(question__id=2, user=me).count() > 0
+            context['q2'] = Submission.objects.filter(question__id=2).values('answer__title').annotate(total=Sum('score'))
+            context['q2_count'] = Submission.objects.filter(question_id=2).values('user').annotate(Count('user', distinct=True)).count()
+
+        return context
+
 class Ask(TemplateView):
 
 
@@ -30,8 +52,8 @@ class Ask(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(Ask, self).get_context_data(**kwargs)
-        context['question'] = Question.objects.get(id=1)
-        context['answers'] = Answer.objects.filter(question_id=1).order_by('?')
+        context['question'] = Question.objects.get(id=kwargs['question_id'])
+        context['answers'] = Answer.objects.filter(question_id=kwargs['question_id']).order_by('?')
         return context
 
 

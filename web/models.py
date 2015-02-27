@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import Max, Sum
-
+from django.conf import settings
 
 from taggit.managers import TaggableManager
 
@@ -12,6 +12,89 @@ from taggit.managers import TaggableManager
 # def my_callback(sender, **kwargs):
 #     print "New user account: %s!" % kwargs['user'].username
 
+from django.db import models
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser
+)
+
+
+class MyUserManager(BaseUserManager):
+    def create_user(self, email,  password=None):
+        """
+        Creates and saves a User with the given email, date of
+        birth and password.
+        """
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+
+        )
+
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password):
+        """
+        Creates and saves a superuser with the given email, date of
+        birth and password.
+        """
+        user = self.create_user(email,
+            password=password,
+
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class MyUser(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name='email address',
+        max_length=255,
+        unique=True,
+    )
+    username = models.CharField(max_length=150, default='')
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = MyUserManager()
+
+    USERNAME_FIELD = 'email'
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super(MyUser, self).save(*args, **kwargs)
+
+    def get_full_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def get_short_name(self):
+        # The user is identified by their email address
+        return self.email
+
+    def __str__(self):              # __unicode__ on Python 2
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        "Does the user have a specific permission?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    @property
+    def is_staff(self):
+        "Is the user a member of staff?"
+        # Simplest possible answer: All admins are staff
+        return self.is_admin
 
 class Answer(models.Model):
     title = models.CharField(max_length=255)
@@ -24,22 +107,18 @@ class Answer(models.Model):
     is_default = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ('question', 'order', 'slug')
-        unique_together = (('question', 'slug'),)
+        ordering = ('question', 'order')
 
     def __unicode__(self):
-        return u"%s: %s" % (self.question.slug, self.title)
+        return u"%s: %s" % (self.question.label, self.title)
 
 
-    def save(self, *args, **kwargs):
-
-        super(Answer, self).save(*args, **kwargs)
 
 class GroupedAnswer(Answer):
     group = models.CharField(max_length=255)
 
     class Meta:
-        ordering = ('group', 'order', 'slug')
+        ordering = ('group', 'order',)
 
 class Question(models.Model):
     QUESTION_TYPES = [
@@ -49,9 +128,7 @@ class Question(models.Model):
         ('P', 'Prioritise question'),
     ]
 
-    slug = models.SlugField(
-        help_text="A slug for identifying answers to this specific question "
-        "(allows multiple only for multiple languages)")
+
     tags = TaggableManager(blank=True)
     label = models.CharField(max_length=512, blank=True)
     help_text = models.CharField(max_length=512, blank=True)
@@ -125,7 +202,7 @@ class Question(models.Model):
             return None
 
     def __unicode__(self):
-        return self.slug
+        return self.label
 
 
 
@@ -136,10 +213,12 @@ class SubmissionSet(models.Model):
     """
     slug = models.SlugField(blank=True)
     tag = models.SlugField(blank=True)
-    user = models.ForeignKey('auth.User', related_name='saq_submissions_sets')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='saq_submissions_sets')
 
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+
 
     def save(self, *args, **kwargs):
 
@@ -147,10 +226,11 @@ class SubmissionSet(models.Model):
 
 
 class Submission(models.Model):
-    question = models.SlugField()
-    answer = models.TextField(blank=True)
+    question = models.ForeignKey(Question)
+    answer = models.ForeignKey(Answer)
+    answer_text = models.TextField(blank=True)
     score = models.IntegerField(default=0)
-    user = models.ForeignKey('auth.User', related_name='saq_submissions')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='saq_submissions')
 
     submission_set = models.ForeignKey(
         SubmissionSet, related_name='submissions', null=True)
@@ -159,8 +239,6 @@ class Submission(models.Model):
         ordering = ('submission_set', 'user', 'question', 'score')
 
 
-    def answer_list(self):
-        return self.answer.split(",")
 
     def __unicode__(self):
         return u"%s answer to %s (%s)" % (

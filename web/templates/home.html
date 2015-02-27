@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+
+
+{% block main %}
+    <h1>What makes the perfect Committee?</h1>
+
+    <p>Prioritise the characteristics of a perfect committee and a perfect committee member then see how others voted.</p>
+
+    {% if user.is_authenticated %}
+        <p>Answering as: {{ user.email }} &nbsp;<a href="/logout" class="btn btn-warning ">Logout</a></p>
+        <div class="row">
+
+            <div class="col-md-6">
+                {% if q1_answered %}
+                    <a href="/ask/1/" class="btn btn-primary btn-lg">Revise The Perfect Committee Member</a><br />
+                    <h3>Current order after {{ q1_count }} Votes</h3>
+                    <ol>
+                        {% for item in q1 %}
+                            <li>{{ item.answer__title }} </li>
+                        {% endfor %}
+                    </ol>
+                {%  else  %}
+                    <a href="/ask/1/" class="btn btn-primary btn-lg">What makes the perfect committee member?</a>
+                {% endif %}
+            </div>
+
+            <div class="col-md-6">
+                {% if q2_answered %}
+                    <a href="/ask/2/" class="btn btn-primary btn-lg">Revise The Perfect Committee</a><br />
+                    <h3>Current order after {{ q2_count }} Votes</h3>
+                    <ol>
+                        {% for item in q2 %}
+                            <li>{{ item.answer__title }} </li>
+                        {% endfor %}
+                    </ol>
+                {%  else  %}
+                    <a href="/ask/2/" class="btn btn-success btn-lg">What makes the perfect committee?</a>
+                {% endif %}
+            </div>
+
+        </div>
+
+
+
+
+
+    {% else %}
+        <a href="/ask/1/" class="btn btn-success btn-lg">Get Started...</a>
+    {% endif %}
+{% endblock %}
