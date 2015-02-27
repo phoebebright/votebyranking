@@ -1,2 +1,4 @@
 # votebyranking
-Given a list of characteristics, vote on the order of priority you prefer then see how others voted.
+In Development!
+
+Currently setup to handle just two questions with multiple answers to be ranked.
